@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>กิจกรรมรู้เขารู้เรา</title>
+  <style>
+    body {
+      font-family: 'Kanit', sans-serif;
+      background-color: #fffbea;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    main {
+      flex: 1;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ff4081;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      max-width: 500px;
+      margin: auto;
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 48%;
+      padding: 12px;
+      background-color: #ff4081;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e73370;
+    }
+
+    .reset-btn {
+      background-color: #aaa;
+    }
+
+    .reset-btn:hover {
+      background-color: #888;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .result {
+      margin-top: 30px;
+      font-size: 1.3rem;
+      text-align: center;
+      background-color: #fff3cd;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px dashed #ffc107;
+    }
+
+    footer {
+      margin-top: auto;
+      text-align: center;
+      padding: 15px 10px;
+      background-color: #fce4ec;
+      border-top: 1px solid #ddd;
+      font-size: 0.95rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>กิจกรรมรู้เขารู้เรา</h1>
+    <div class="card">
+      <label>วันเกิด</label>
+      <select id="day">
+        <option>วันอาทิตย์</option>
+        <option>วันจันทร์</option>
+        <option>วันอังคาร</option>
+        <option>วันพุธ</option>
+        <option>วันพฤหัสบดี</option>
+        <option>วันศุกร์</option>
+        <option>วันเสาร์</option>
+      </select>
+
+      <label>เดือนเกิด</label>
+      <select id="month">
+        <option value="ม.ค">มกราคม</option>
+        <option value="ก.พ">กุมภาพันธ์</option>
+        <option value="มี.ค">มีนาคม</option>
+        <option value="เม.ย">เมษายน</option>
+        <option value="พ.ค">พฤษภาคม</option>
+        <option value="มิ.ย">มิถุนายน</option>
+        <option value="ก.ค">กรกฎาคม</option>
+        <option value="ส.ค">สิงหาคม</option>
+        <option value="ก.ย">กันยายน</option>
+        <option value="ต.ค">ตุลาคม</option>
+        <option value="พ.ย">พฤศจิกายน</option>
+        <option value="ธ.ค">ธันวาคม</option>
+      </select>
+
+      <label>วันเกิด (1 - 31)</label>
+      <input type="number" id="number" min="1" max="31" placeholder="กรอกวันเกิด 1 - 31">
+
+      <div class="btn-group">
+        <button onclick="generateResult()">ดูคำทำนาย</button>
+        <button class="reset-btn" onclick="resetForm()">ล้างข้อมูล</button>
+      </div>
+
+      <div class="result" id="result"></div>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 ครูภาษาไทยจ้าวของแท้ | กิจกรรมสนุก ๆ เพื่อสร้างรอยยิ้ม 💖
+  </footer>
+
+  <script>
+    const dayMap = {
+      "วันอาทิตย์": "ฉันนี่แหละ",
+      "วันจันทร์": "กระผม",
+      "วันอังคาร": "หนู",
+      "วันพุธ": "อั๊วะ",
+      "วันพฤหัสบดี": "ข้าน้อย",
+      "วันศุกร์": "เราเอง",
+      "วันเสาร์": "ฉันเอง"
+    };
+
+    const monthMap = {
+      "ม.ค": "อาหัก",
+      "ก.พ": "ถูกเท",
+      "มี.ค": "โสด",
+      "เม.ย": "หน้าตาดี",
+      "พ.ค": "แฟนหล่อ",
+      "มิ.ย": "เนื้อหอม",
+      "ก.ค": "ตัวมัม",
+      "ส.ค": "สวยรวย",
+      "ก.ย": "หลงตัวเอง",
+      "ต.ค": "งงงวย",
+      "พ.ย": "โสดสนิท",
+      "ธ.ค": "ร้อนแรง"
+    };
+
+    const numberMap = {
+      0: "ตลอดไป",
+      1: "ทั้งชาตินี้ชาติหน้า",
+      2: "ไม่หายหัว",
+      3: "ร้องอยู่นั่น",
+      4: "จ๊าบ",
+      5: "รุงรัง",
+      6: "ฮาร์ดคอร์",
+      7: "แก้ไม่ได้",
+      8: "เปลี่ยนไม่ได้แล้ว",
+      9: "เรื่องจริงหรอ?"
+    };
+
+    function generateResult() {
+      const day = document.getElementById('day').value;
+      const month = document.getElementById('month').value;
+      const number = parseInt(document.getElementById('number').value);
+
+      if (isNaN(number) || number < 1 || number > 31) {
+        document.getElementById('result').innerHTML = "กรุณากรอกวันเกิดระหว่าง 1 ถึง 31";
+        return;
+      }
+
+      const lastDigit = number % 10;
+      const result = `${dayMap[day]} ${monthMap[month]} ${numberMap[lastDigit]}`;
+      document.getElementById('result').innerHTML = `ผลลัพธ์: <strong>${result}</strong>`;
+    }
+
+    function resetForm() {
+      document.getElementById('day').selectedIndex = 0;
+      document.getElementById('month').selectedIndex = 0;
+      document.getElementById('number').value = '';
+      document.getElementById('result').innerHTML = '';
+    }
+  </script>
+</body>
+</html>
